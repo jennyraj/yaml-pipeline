@@ -1,0 +1,28 @@
+parameters:
+- name: serviceName
+  type: string
+  default: 'SampleApp'
+- name: packageDir
+  type: string
+  default: '$(Build.Repository.LocalPath)/adf_scripts'
+- name: adfDir
+  type: string
+  default: '$(Build.Repository.LocalPath)/adf'
+- name: baseEnv
+  default: 'dev'
+- name: baseRegion
+  default: 'eus'
+stages:
+- stage: '${{ parameters.serviceName }}_build'
+  variables:
+  - template: ../variables/azure_global_variables.yml
+  - template: ../variables/azure_${{ parameters.baseEnv }}_variables.yml
+  jobs:
+    - template: ../jobs/adf_build_job.yml
+      parameters:
+        environmentName: ${{ parameters.baseEnv }}
+        dataFactoryResourceID: '/subscriptions/${{ variables.azureSubscriptionID }}/resourceGroups/${{ variables.resourceGroupAbrv }}-${{ parameters.serviceName }}-${{ parameters.baseEnv }}-${{ parameters.baseRegion }}/providers/Microsoft.DataFactory/factories/${{ variables.dataFactoryAbrv }}-${{ parameters.serviceName }}-${{ parameters.baseEnv }}-${{ parameters.baseRegion }}'
+        serviceName: ${{ parameters.serviceName }}
+        regionAbrv: ${{ parameters.baseRegion }}
+        packageDir: ${{ parameters.packageDir }}
+        adfDir: ${{ parameters.adfDir }}

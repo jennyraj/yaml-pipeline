@@ -1,0 +1,17 @@
+parameters:
+- name: customCommand
+  type: string
+  default: ''
+- name: packageDir
+  type: string
+  default: ''
+- name: displayName
+  type: string
+  default: ''
+steps:
+- task: Npm@1
+  displayName: ${{ parameters.displayName }}
+  inputs:
+    command: 'custom'
+    customCommand: ${{ parameters.customCommand }}
+    workingDir: ${{ parameters.packageDir }}
